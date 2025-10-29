@@ -2,7 +2,24 @@
 #include <iostream>
 #include "constants.h"
 #include "player.h"
+#include "detours/detours.h"
+#include "menu.h"
 
+void aimbot() {
+    while (true) {
+        Sleep(100);
+        if (GetAsyncKeyState(VK_DELETE))
+            Menu::toggleMenu();
+    }
+}
+void hook() {
+    Sleep(1000);
+	DisableThreadLibraryCalls(hModule);
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    DetourAttach(&(PVOID&)oWglSwapBuffers, Menu::newSwapBuffers);
+	DetourTransactionCommit();
+}
 
 void console() {
 	AllocConsole();
@@ -30,8 +47,9 @@ void console() {
                 std::cout << "  Name: " << players->players[i]->name << std::endl;
             }
         }
-        
+
     }
+    FreeConsole();
 }
 
 DWORD __stdcall Thread(HMODULE hModule){
@@ -40,12 +58,20 @@ DWORD __stdcall Thread(HMODULE hModule){
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  dwReasonForCall, LPVOID lpReserved) {
-    if (dwReasonForCall == DLL_PROCESS_ATTACH) {
-        HANDLE hThread = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)Thread, hModule, 0, nullptr);
-        HANDLE hConsole = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)console, hModule, 0, nullptr);
-    }
-    if (dwReasonForCall == DLL_PROCESS_DETACH) {
-	    
+    switch (dwReasonForCall) {
+    case DLL_PROCESS_ATTACH:
+        CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)console, hModule, 0, nullptr);
+        CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)hook, hModule, 0, nullptr);
+        CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)aimbot, hModule, 0, nullptr);
+        /*if (dwReasonForCall == DLL_PROCESS_ATTACH) {
+            HANDLE hConsole =
+            HANDLE hHook =
+            HANDLE hAimbot =
+        }*/
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
     }
 
     return TRUE;

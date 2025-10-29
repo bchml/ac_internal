@@ -33,4 +33,9 @@ struct Vec3 {
         float dz = z - other.z;
         return std::sqrt(dx * dx + dy * dy + dz * dz);
     }
+
+    // Calculate the length of the vector
+    float length() const {
+        return std::sqrt(x * x + y * y + z * z);
+    }
 };

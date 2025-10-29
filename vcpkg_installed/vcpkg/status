@@ -1,0 +1,32 @@
+Package: detours
+Version: 4.0.1
+Port-Version: 8
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 215c1c56fd50f27f659e2e32d12c5263d08ccf7ad624e9a8d63a7a2d89dbc37a
+Description: Detours is a software package for monitoring and instrumenting API calls on Windows.
+Status: install ok installed
+
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: cf538692997cc98b6eeddb266902fa2b0200afbff254c8bb5fe6e1c187d4f6cf
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 7b430ff8f4459cf5f4909a3188adcbfb6576d15ae737431d3e1cd2383d1c8e90
+Status: install ok installed
+
+Package: fmt
+Version: 12.0.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: f703c868077740e48e0ad82e1b10b2dc0cfe59b82a9da856a900316dcb1b15a6
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: install ok installed
+

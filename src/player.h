@@ -3,6 +3,7 @@
 #include <basetsd.h>
 #include <cstdint>
 
+
 struct CurrentWeapon {
     char pad_0000[0x48];        // 0x00 → 0x48
     int shootingSpeed;          // 0x48
