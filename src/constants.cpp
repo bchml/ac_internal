@@ -9,7 +9,8 @@ extern entityList* entityListPtr = (entityList*)(baseAddress + 0x191FCC);
 extern entityList* players = *(entityList**)(baseAddress + 0x191FCC); //array of players
 
 extern int numPlayers = *(int*)(baseAddress + 0x191FD4);
-extern float* viewMatrix = (float*)(baseAddress + 0x57DFD0);
+//extern float* viewMatrix = (float*)(baseAddress + 0x192078);
+extern float* viewMatrix = (float*)(baseAddress + 0x17DFD0);
 
 void resetPointers() {
 	localPlayerPtr = *(playerEntity**)(baseAddress + 0x18AC00);

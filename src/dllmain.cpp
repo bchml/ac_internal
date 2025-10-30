@@ -7,6 +7,7 @@
 
 void aimbot() {
     while (true) {
+        resetPointers();
         Sleep(100);
         if (GetAsyncKeyState(VK_DELETE))
             Menu::toggleMenu();
@@ -39,12 +40,22 @@ void console() {
         if (input == "exit") {
             break;
         }
+        if (input == "localplayer") {
+			std::cout << "Local Player Address: " << std::hex << reinterpret_cast<uintptr_t>(localPlayerPtr) << std::dec << std::endl;
+        }
+        if (input == "viewmatrix") {
+			std::cout << "View Matrix Address: " << std::hex << reinterpret_cast<uintptr_t>(viewMatrix) << std::dec << std::endl;
+        }
+        if (input == "entitylist") {
+			std::cout << "Entity List Address: " << std::hex << reinterpret_cast<uintptr_t>(entityListPtr) << std::dec << std::endl;
+        }
+        if (input == "numPlayers") {
+			std::cout << "Number of Players: " << numPlayers << std::endl;
+        }
         if (input == "players") {
             for (int i = 0; i < numPlayers; i++) {
-				if (players->players[i] == nullptr || players->players[i]->vftable == nullptr) break;
+				if (players->players[i] == nullptr || players->players[i]->vtable == nullptr) break;
                 std::cout << "  Health: " << players->players[i]->health << std::endl;
-                std::cout << "  Armor: " << players->players[i]->armor << std::endl;
-                std::cout << "  Name: " << players->players[i]->name << std::endl;
             }
         }
 

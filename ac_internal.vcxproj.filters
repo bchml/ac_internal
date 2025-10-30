@@ -51,6 +51,12 @@
     <ClCompile Include="src\settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="geom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\vec.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\constants.h">

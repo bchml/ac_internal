@@ -9,6 +9,8 @@
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_opengl2.h"
 #include <iostream>
+#include "settings.h"
+#include "esp.h"
 
 const ImVec2 windowSize = ImVec2(400, 400);
 bool showMenu = false;
@@ -41,8 +43,29 @@ LRESULT CALLBACK newWNDProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 	return CallWindowProc(oWNDProc, hWnd, uMsg, wParam, lParam);
 }
 
+void testSettings() {
+	if (!ImGui::BeginTabItem("Test"))
+		return;
+
+	ImGui::Text("Hello, world!");
+	if (ImGui::Button("Test Button")) {
+		localPlayerPtr->health = 1337;
+	}
+	ImGui::EndTabItem();
+}
+
+void espSettings() {
+	if (!ImGui::BeginTabItem("ESP"))
+		return;
+	ImGui::Checkbox("Enable ESP", &Settings::ESP::enabled);
+	ImGui::Checkbox("Draw team", &Settings::ESP::drawTeam);
+	ImGui::ColorEdit4("Team color", (float*)&Settings::ESP::teamColor->Value);
+	ImGui::ColorEdit4("Enemy color", (float*)&Settings::ESP::enemyColor->Value);
+	ImGui::EndTabItem();
+}
+
 void Menu::toggleMenu() {
-	showMenu = !showMenu;  
+	showMenu = !showMenu;
 	ImGuiIO& io = ImGui::GetIO();
 	io.WantCaptureMouse = showMenu;
 	io.WantCaptureKeyboard = showMenu;
@@ -63,7 +86,7 @@ void Menu::init() {
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableSetMousePos; // we will provide mouse position
 	io.Fonts->AddFontDefault();
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-	
+
 	ImGui::SetNextWindowSize(windowSize);
 	initialized = true;
 	std::cout << "menu initialized\n";
@@ -78,16 +101,18 @@ void Menu::startRender()
 
 void Menu::render()
 {
-	oSDL_SetRelativeMouseMode(!showMenu);
+
 	if (!showMenu)
 		return;
-
-	ImGui::Begin("Menu", &showMenu);
-	ImGui::Text("Hello, world!");
-	if (ImGui::Button("Test Button")) {
-		localPlayerPtr->health = 1337;
+	ImGui::Begin("MONEYHACK $$$", &showMenu);
+	if(ImGui::BeginTabBar("Tabbar")) {
+		espSettings();
+		testSettings();
+		ImGui::EndTabBar();
 	}
+	oSDL_SetRelativeMouseMode(!showMenu);
 	ImGui::End();
+
 }
 
 void setupContext(HDC& hDc) {
@@ -126,6 +151,7 @@ BOOL __stdcall Menu::newSwapBuffers(HDC hDc)
 	wglMakeCurrent(hDc, myContext);
 	Menu::startRender();
 	Menu::render();
+	ESP::drawESP();
 	Menu::endRender();
 
 	wglMakeCurrent(hDc, gameContext);

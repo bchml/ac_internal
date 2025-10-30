@@ -1,41 +1,65 @@
 #pragma once
-#include <cmath>
+#include <math.h>
+#include <string>
+constexpr auto PI = 3.1415927f;
+struct Vec2 {
+    float x, y;
+    Vec2() = default;
+    Vec2(float x, float y) : x(x), y(y) {}
 
-struct Vec3 {
-    float x, y, z;
-
-    // Constructor
-    Vec3(float x = 0, float y = 0, float z = 0) : x(x), y(y), z(z) {}
-
-    // Addition
-    Vec3 operator+(const Vec3& other) const {
-        return { x + other.x, y + other.y, z + other.z };
-    }
-
-    // Subtraction
-    Vec3 operator-(const Vec3& other) const {
-        return { x - other.x, y - other.y, z - other.z };
-    }
-
-    // Scalar division
-    Vec3 operator/(float scalar) const {
-        return { x / scalar, y / scalar, z / scalar };
-    }
-
-    // Scalar multiplication
-    Vec3 operator*(float scalar) const {
-        return { x * scalar, y * scalar, z * scalar };
-    }
-
-    float Distance(const Vec3& other) const {
+    float DistanceTo(const Vec2& other) const {
         float dx = x - other.x;
         float dy = y - other.y;
-        float dz = z - other.z;
-        return std::sqrt(dx * dx + dy * dy + dz * dz);
-    }
-
-    // Calculate the length of the vector
-    float length() const {
-        return std::sqrt(x * x + y * y + z * z);
+        return sqrtf(dx * dx + dy * dy);
     }
 };
+class Vector3
+{
+public:
+
+    float x;
+    float y;
+    float z;
+
+    Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
+    Vector3(const float x, const float y, const float z) : x(x), y(y), z(z) {}
+    Vector3 operator + (const Vector3& rhs) const { return Vector3(x + rhs.x, y + rhs.y, z + rhs.z); }
+    Vector3 operator - (const Vector3& rhs) const { return Vector3(x - rhs.x, y - rhs.y, z - rhs.z); }
+    Vector3 operator * (const float& rhs) const { return Vector3(x * rhs, y * rhs, z * rhs); }
+    Vector3 operator / (const float& rhs) const { return Vector3(x / rhs, y / rhs, z / rhs); }
+    Vector3& operator += (const Vector3& rhs) { return *this = *this + rhs; }
+    Vector3& operator += (const float rhs) { return *this = *this + Vector3(rhs, rhs, rhs); }
+    Vector3& operator -= (const Vector3& rhs) { return *this = *this - rhs; }
+    Vector3& operator *= (const float& rhs) { return *this = *this * rhs; }
+    Vector3& operator /= (const float& rhs) { return *this = *this / rhs; }
+    bool operator == (const Vector3& rhs) const { return x == rhs.x && y == rhs.y && z == rhs.z; }
+    float Length() const { return sqrtf(x * x + y * y + z * z); } //AKA Magnitude
+    Vector3 Normalize() const { return *this * (1 / Length()); } // 1/ Length() 
+    float Distance(const Vector3& rhs) const { return (*this - rhs).Length(); }
+    Vector3& abs() { x = fabs(x); y = fabs(y); z = fabs(z); return *this; }
+    void NormalizeAngle(float yawMin = -90, float yawMax = 90, float pitchMin = 0, float pitchMax = 360);
+    std::string ToString();
+
+};
+
+struct Vec4
+{
+    float x;
+    float y;
+    float z;
+    float w;
+};
+
+using Vec3 = Vector3;
+using vec3 = Vector3;
+using Vec = Vector3;
+using vec = Vector3;
+
+Vec3 OpenGLWorldToScreen(Vec3& pos, const float matrix[16], int windowWidth, int windowHeight);
+Vec3 DirectXWorldToScreen(Vec3& pos, const float matrix[16], int windowWidth, int windowHeight);
+Vec3 CalcAngle(const Vec3& origin, const Vec3& target, bool invertYaw = false, bool invertPitch = false);
+
+Vec3 DegreesToRadians(const Vec3& vec);
+float DegreesToRadians(float num);
+Vec3 RadiansToDegrees(const Vec3& vec);
+float RadiansToDegrees(float num);

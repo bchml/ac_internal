@@ -9,7 +9,6 @@ void resetPointers();
 extern HMODULE hModule;
 extern uintptr_t baseAddress;
 
-extern entityList* players;
 extern playerEntity* localPlayerPtr;
 extern entityList* entityListPtr;
 extern entityList* players;
